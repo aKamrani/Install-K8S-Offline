@@ -1,10 +1,17 @@
-<p align="center">
+<div align="center">
   <h1>🚀 Install K8S Offline</h1>
   <h2>By Kubespray</h2>
-</p>
+</div>
 
 ## ✨ What's this?
 Offline helper for the [Kubespray offline environment](https://kubespray.io/#/docs/operations/offline-environment) — now powered by a single orchestrator: `offline.sh` 🧰
+
+## 🛤️ Two ways to install Kubernetes offline
+
+1) 🧑‍🏭 DIY with this repo: download all required packages, images, and files yourself using `./offline.sh`.
+2) 🧳 Use prebuilt Docker images: `akamrani/offline-kubespray:<k8s-version>` (e.g. `akamrani/offline-kubespray:1.32.8`) and extract the prepared files from the image.
+
+The guide for option 2 is below; the DIY workflow (option 1) follows afterward.
 
 ### It can:
 
@@ -45,6 +52,166 @@ This performs, in order:
 - `images-extra` → pull any images listed in `imagelists/*.txt`
 - `repo` → build local RPM/DEB repositories
 - `copy-target` → copy target scripts into `outputs/`
+
+---
+
+## 🧳 Option 2: Use the prebuilt Docker image
+
+Images are tagged by Kubernetes version, e.g. `akamrani/offline-kubespray:1.32.8`. You can also use a registry mirror if you have one (example below include `akamrani`).
+
+### Step 1: Extract Kubespray Files 📂
+
+Use one of the following commands to extract the installation files from the Docker image:
+
+```bash
+# Using specific version (Docker Hub)
+cid=$(docker create akamrani/offline-kubespray:1.32.8) && \
+  docker cp "$cid:/data/install-k8s-offline" ./install-k8s-offline && \
+  docker rm "$cid"
+
+# Or using latest tag (Docker Hub)
+cid=$(docker create akamrani/offline-kubespray:latest) && \
+  docker cp "$cid:/data/install-k8s-offline" ./install-k8s-offline && \
+  docker rm "$cid"
+```
+
+This command will:
+
+- 🏗️ Create a container from the image
+- 📋 Copy the installation files to your local directory
+- 🗑️ Clean up the temporary container
+
+### Step 2: Navigate to the Installation Directory 📁
+
+```bash
+cd ./install-k8s-offline
+```
+
+### Step 3: Run Setup Scripts 📜
+
+Run the following scripts in order:
+
+```bash
+./setup-container.sh      # 🐳 Install containerd from local files; load nginx and registry images
+./start-nginx.sh          # 🌐 Start nginx container
+./setup-offline.sh        # ⚙️ Configure yum/apt & PyPI to use local nginx
+./setup-py.sh             # 🐍 Install python3 and venv from local repo
+./start-registry.sh       # 📦 Start docker private registry container
+./load-push-all-images.sh # 🚀 Load all images to containerd, tag & push to registry
+./extract-kubespray.sh    # 📋 Extract kubespray tarball and apply patches
+```
+
+### Configuration 🔧
+
+You can configure the port numbers of nginx and the private registry in the `config.sh` file.
+
+### Step 4: Install Required Packages 📦
+
+Install Python 3, pip, and Ansible:
+
+```bash
+sudo apt update
+sudo apt install -y python3 python3-venv python3-pip
+pip install ansible
+```
+
+Compatible Ansible Versions ✅
+
+- Ansible: 9.13.0
+- Ansible Core: 2.16.14
+
+To check your installed Ansible versions:
+
+```bash
+pip show ansible ansible-core
+```
+
+Recommended: Use the exact versions mentioned above for best compatibility. 🎯
+
+### Step 5: Extract Kubespray and Apply Patches 🛠️
+
+```bash
+./extract-kubespray.sh
+cd kubespray-{version}
+```
+
+### Step 6: Create and Activate Virtual Environment 🏠
+
+```bash
+python3.11 -m venv ~/.venv/3.11
+source ~/.venv/3.11/bin/activate
+python --version   # check python version
+```
+
+### Step 7: Configure Inventory and Settings ⚙️
+
+⚠️ IMPORTANT: After extracting kubespray, you need to:
+
+- Edit inventory and cluster settings as required by kubespray
+- Configure offline settings in `group_vars/all/offline.yml`:
+  - Change `YOUR_HOST` to your registry/nginx host IP (reachable from all Kubernetes nodes)
+
+### Step 8: Configure Registries and Hosts 🌐
+
+```bash
+ansible-playbook -i inventory/local/hosts.ini playbook/offline-repo.yml
+```
+
+### Step 9: Run Kubespray Deployment 🚀
+
+```bash
+ansible-playbook -i inventory/local/hosts.ini --become --become-user=root cluster.yml
+```
+
+### 📚 What's Included
+
+- 🐳 Kubespray: The Kubernetes deployment tool
+- 📦 Container Images: All required container images
+- 🔧 Configuration Files: Pre-configured settings
+- 📋 Scripts: Installation and setup scripts
+- 🛠️ Dependencies: All necessary dependencies
+
+### 🎯 Complete Installation Flow
+
+```bash
+# 1. Extract files from Docker image
+cid=$(docker create akamrani/offline-kubespray:latest) && \
+  docker cp "$cid:/data/install-k8s-offline" ./install-k8s-offline && \
+  docker rm "$cid"
+
+# 2. Navigate to directory
+cd ./install-k8s-offline
+
+# 3. Run setup scripts in order
+./setup-container.sh
+./start-nginx.sh
+./setup-offline.sh
+./setup-py.sh
+./start-registry.sh
+./load-push-all-images.sh
+./extract-kubespray.sh
+
+# 4. Install required packages
+sudo apt update
+sudo apt install -y python3 python3-venv python3-pip
+pip install ansible # Use specific version for compatibility
+
+# 5. Setup virtual environment
+python3.11 -m venv ~/.venv/3.11
+source ~/.venv/3.11/bin/activate
+
+# 6. Navigate to kubespray directory
+cd kubespray-{version}
+
+# 7. Configure offline settings
+vim group_vars/all/offline.yml  # Change YOUR_HOST to your registry IP
+
+# 8. Configure registries on all nodes
+ansible-playbook -i inventory/mycluster/hosts.yaml offline-repo.yml
+
+# 9. Deploy Kubernetes cluster
+ansible-playbook -i inventory/mycluster/hosts.yaml --become --become-user=root cluster.yml
+```
 
 ## 🔧 Power users: subcommands
 
