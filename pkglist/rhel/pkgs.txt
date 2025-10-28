@@ -1,0 +1,43 @@
+# Do not require docker anymore
+#docker-ce
+#containerd.io
+
+# kubespray: required packages (see roles/kubernetes/preinstall/vars/main.yml)
+bash-completion
+#conntrack
+conntrack-tools
+container-selinux
+curl
+device-mapper-libs
+e2fsprogs
+ebtables
+ipset
+iptables
+ipvsadm
+libseccomp
+nftables
+nss
+openssl
+rsync
+socat
+tar
+unzip
+xfsprogs
+
+# compilers (for cffi, etc)
+#gcc
+#annobin
+#libffi-devel
+#openssl-libs
+#openssl-devel
+
+# others
+audit
+yum-plugin-versionlock
+firewalld
+gnupg2
+lvm2
+
+# nfs
+#rpcbind
+#nfs-utils

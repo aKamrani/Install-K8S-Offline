@@ -1,0 +1,45 @@
+# Do not require docker anymore
+#docker-ce
+#docker-ce-cli
+#containerd.io
+
+# python3 (non version specific)
+python3-minimal
+python3-selinux
+# python-cryptography
+
+# kubespray: required packages (see roles/kubernetes/preinstall/vars/main.yml)
+apparmor
+apt-transport-https
+bash-completion
+conntrack
+curl
+e2fsprogs
+ebtables
+gnupg
+ipset
+iptables
+ipvsadm
+libseccomp2
+nftables
+openssl
+python3-apt
+rsync
+socat
+software-properties-common
+tar
+unzip
+xfsprogs
+
+# compilers (for cffi, etc)
+#gcc
+#libffi-dev
+#libssl-dev
+
+# Others
+firewalld
+lvm2
+
+# nfs
+#nfs-common
+#nfs-kernel-server
