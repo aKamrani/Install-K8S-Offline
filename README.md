@@ -1,5 +1,5 @@
 <div align="center">
-  <b><span style="font-size:2em;">🚀 Install K8S Offline</span></b><br/>
+  <b><span style="font-size:7em;">🚀 Install K8S Offline</span></b><br/>
   <b><span style="font-size:1.5em;">By Kubespray</span></b>
 </div>
 
