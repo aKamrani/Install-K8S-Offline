@@ -1,6 +1,6 @@
 <div align="center">
 # 🚀 Install K8S Offline
-#### By using Kubespray
+### By using Kubespray
 </div>
 
 ## ✨ What's this?
