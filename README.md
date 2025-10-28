@@ -1,10 +1,10 @@
 <div align="center">
-  <h1>🚀 Install K8S Offline</h1>
-  <h2>By Kubespray</h2>
+  <b><span style="font-size:2em;">🚀 Install K8S Offline</span></b><br/>
+  <b><span style="font-size:1.5em;">By Kubespray</span></b>
 </div>
 
 ## ✨ What's this?
-Offline helper for the [Kubespray offline environment](https://kubespray.io/#/docs/operations/offline-environment) — now powered by a single orchestrator: `offline.sh` 🧰
+Offline helper for the [Kubespray offline environment](https://kubespray.io/#/docs/operations/offline-environment) — powered by a single orchestrator: `offline.sh` 🧰
 
 ## 🛤️ Two ways to install Kubernetes offline
 
