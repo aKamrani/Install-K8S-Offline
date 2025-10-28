@@ -207,10 +207,10 @@ cd kubespray-{version}
 vim group_vars/all/offline.yml  # Change YOUR_HOST to your registry IP
 
 # 8. Configure registries on all nodes
-ansible-playbook -i inventory/mycluster/hosts.yaml offline-repo.yml
+ansible-playbook -i inventory/mycluster/hosts.ini offline-repo.yml
 
 # 9. Deploy Kubernetes cluster
-ansible-playbook -i inventory/mycluster/hosts.yaml --become --become-user=root cluster.yml
+ansible-playbook -i inventory/mycluster/hosts.ini --become --become-user=root cluster.yml  -e "unsafe_show_logs=true" -vvv
 ```
 
 ## 🔧 Power users: subcommands
@@ -263,6 +263,7 @@ cd kubespray-{version}
 
 ```bash
 pip install -U pip
+pip install ansible-core==2.16.14
 pip install -r requirements.txt
 ```
 
