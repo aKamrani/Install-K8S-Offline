@@ -1,14 +1,10 @@
 <div align="center">
-
 # 🚀 Install K8S Offline
-
-### By using Kubespray
+#### By using Kubespray
+</div>
 
 ## ✨ What's this?
-
 Offline helper for the [Kubespray offline environment](https://kubespray.io/#/docs/operations/offline-environment) — now powered by a single orchestrator: `offline.sh` 🧰
-
-</div>
 
 ### It can:
 
