@@ -1,6 +1,6 @@
 <div align="center">
   <h1>🚀 Install K8S Offline</h1>
-  <h2>By Kubespray</h2>
+  <h3>By Kubespray</h3>
 </div>
 
 ## ✨ What's this?
